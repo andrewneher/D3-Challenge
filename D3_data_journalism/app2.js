@@ -77,7 +77,7 @@ d3.csv("data.csv").then(function(healthData) {
       .attr("class", "tooltip")
       .offset([80, -60])
       .html(function(d) {
-        return (`${d.state}<br>Hair length: ${d.poverty}<br>Hits: ${d.healthcare}`);
+        return (`${d.state}<br>Poverty: ${d.poverty}<br>Healthcare: ${d.healthcare}`);
       });
 
     // Step 7: Create tooltip in the chart
@@ -103,7 +103,6 @@ console.log(circlesGroup);
       .attr("dx", d => xLinearScale(d.poverty))
       .attr("dy", d => yLinearScale(d.healthcare)+10/2.5)
       .attr("font-size", "10")
-      .attr(".style", "strong")
       .attr("class", "stateText")
     //   .text(d.abbr);
 

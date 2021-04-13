@@ -1,8 +1,8 @@
 var svgWidth = 960;
-var svgHeight = 500;
+var svgHeight = 700;
 
 var margin = {
-  top: 20,
+  top: 100,
   right: 40,
   bottom: 80,
   left: 100
@@ -73,12 +73,12 @@ function updateToolTip(chosenXAxis, circlesGroup) {
       label = "Household Income (Median)";
     }
   
-    var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(function(d) {
-        return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
-      });
+    // var toolTip = d3.tip()
+    //   .attr("class", "tooltip")
+    //   .offset([80, -60])
+    //   .html(function(d) {
+    //     return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
+    //   });
   
     circlesGroup.call(toolTip);
   
@@ -92,6 +92,16 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   
     return circlesGroup;
   }
+
+    
+
+
+  var toolTip = d3.tip()
+  .attr("class", "tooltip")
+  .offset([80, -60])
+  .html(function(d) {
+    return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
+  });
 
 // Retrieve data from the CSV file and execute everything below
 d3.csv("data.csv").then(function(healthData, err) {
@@ -174,8 +184,28 @@ d3.csv("data.csv").then(function(healthData, err) {
         .on("mouseout", function(data, index) {
           toolTip.hide(data);
     });
+    // .append("text")
+    // .text(d => d.abbr);
+
+var textGroup = chartGroup.selectAll("text")
+  .data(healthData)
+  .enter()
+    .append("text")
+    .attr("x", d => xLinearScale(d[chosenXAxis]))
+    .attr("y", d => yLinearScale(d.healthcare)+10/2.5)
+    .on("click", function(data) {
+          toolTip.show(data, this);
+        })
+          // onmouseout event
+          .on("mouseout", function(data, index) {
+            toolTip.hide(data);
+      })
+    .text(d => d.abbr)
+    .attr("font-size", "12")
+    .attr("class", "stateText");
 
 console.log(circlesGroup);
+console.log(textGroup);
 
   // Create group for two x-axis labels
   var labelsGroup = chartGroup.append("g")
@@ -217,14 +247,14 @@ console.log(circlesGroup);
   .classed("axis-text", true)
   .text("Lacks Healthcare (%)");
 
-  circlesGroup.append("text")
-  .text(function(d){
-  return d.abbr
-})
-  .attr("dx", d => xLinearScale(d.poverty))
-  .attr("dy", d => yLinearScale(d.healthcare)+10/2.5)
-  .attr("font-size", "10")
-  .attr("class", "stateText")
+//   circleGroup.append("text")
+//   .text(function(d){
+//   return d.abbr
+// })
+//   .attr("dx", d => xLinearScale(d.poverty))
+//   .attr("dy", d => yLinearScale(d.healthcare)+10/2.5)
+//   .attr("font-size", "10")
+//   .attr("class", "stateText")
 //   .text(d.abbr);
 
 console.log(circlesGroup);
