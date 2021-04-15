@@ -26,6 +26,9 @@ var chartGroup = svg.append("g")
   // Initial Params
 var chosenXAxis = "poverty";
 
+var xNudge = -10;
+var yNudge = 8;
+
 // function used for updating x-scale var upon click on axis label
 function xScale(healthData, chosenXAxis) {
   // create scales
@@ -56,7 +59,9 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
     circlesGroup.transition()
       .duration(1000)
-      .attr("cx", d => newXScale(d[chosenXAxis]));
+      .attr("cx", d => newXScale(d[chosenXAxis]))
+      .attr("x", d => newXScale(d[chosenXAxis]) + xNudge)
+      .attr("y", d => newYScale(d[chosenYAxis]) + yNudge);
   
     return circlesGroup;
   }
@@ -200,6 +205,7 @@ var textGroup = chartGroup.selectAll("text")
           .on("mouseout", function(data, index) {
             toolTip.hide(data);
       })
+      // NOTE: I can't get this part to function. I contenmplated just leaving the state appreviations off, but thought that showing my attempt might count for something.
     .text(d => d.abbr)
     .attr("font-size", "12")
     .attr("class", "stateText");
